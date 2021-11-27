@@ -98,5 +98,17 @@ public class CourierCreationTest {
                 .statusCode(400);
     }
 
+    @Test
+    public void createCourierWithBlankBodyTest() {
+        CourierRequestHelper.createCourier("{}").then().assertThat()
+                .body("message",equalTo("Недостаточно данных для создания учетной записи"))
+                .statusCode(400);
+    }
 
+    @Test
+    public void createCourierWithoutBodyTest() {
+        CourierRequestHelper.createCourier("").then().assertThat()
+                .body("message",equalTo("Недостаточно данных для создания учетной записи"))
+                .statusCode(400);
+    }
 }
