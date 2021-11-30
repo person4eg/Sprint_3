@@ -3,6 +3,7 @@ package com.person4eg.test;
 import com.person4eg.generator.OrderGenerator;
 import com.person4eg.helper.OrderRequestHelper;
 import com.person4eg.pojo.Order;
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -48,7 +49,9 @@ public class OrderCreationTest {
     }
 
     @Test
-    @DisplayName("Check status code and body when creating order")
+    @DisplayName("Проверка создания заказа с разными цветами")
+    @Description("Проверяет создание заказа с разными вариантами выбора цвета: " +
+            "с серым, с черным, серым и черным одновременно или без выбора цвета")
     public void orderCreationTest() {
         Response response = OrderRequestHelper.createOrder(order.toString());
         response.then().assertThat().body("track", notNullValue()).statusCode(201);

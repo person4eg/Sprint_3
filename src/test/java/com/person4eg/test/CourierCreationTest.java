@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.person4eg.generator.CourierGenerator;
 import com.person4eg.helper.CourierRequestHelper;
 import com.person4eg.pojo.Courier;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +35,8 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания курьера с логином и паролем")
+    @Description("При создании курьера с логином и паролем проверяется ожидаемое тело ответа и код статуса")
     public void createCourierTest() {
         CourierRequestHelper.createCourier(courier.toString()).then().assertThat()
                 .body("ok",equalTo(true))
@@ -40,6 +44,9 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания одинаковых курьеров")
+    @Description("При создании одинаковых курьеров с таким же логином и паролем, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createSameCourierTest() {
         CourierRequestHelper.createCourier(courier.toString()).then().statusCode(201);
         CourierRequestHelper.createCourier(courier.toString()).then().assertThat()
@@ -48,6 +55,9 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания курьера с пустым логином")
+    @Description("При создании курьера в поле 'логин' передается строка с нулевым количеством символов, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createCourierWithBlankLoginTest() {
         courier.setLogin("");
         CourierRequestHelper.createCourier(courier.toString()).then().assertThat()
@@ -56,6 +66,9 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания курьера с пустым паролем")
+    @Description("При создании курьера в поле 'пароль' передается строка с нулевым количеством символов, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createCourierWithBlankPasswordTest() {
         courier.setPassword("");
         CourierRequestHelper.createCourier(courier.toString()).then().assertThat()
@@ -64,6 +77,9 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания курьера с пустым именем")
+    @Description("При создании курьера в поле 'имя' передается строка с нулевым количеством символов, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createCourierWitBlankFirstNameTest() {
         courier.setFirstName("");
         CourierRequestHelper.createCourier(courier.toString()).then().assertThat()
@@ -72,6 +88,19 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания курьера с пустым телом")
+    @Description("При создании курьера передается пустое тело запроса, " +
+            "проверяется ожидаемое тело ответа и код статуса")
+    public void createCourierWithBlankBodyTest() {
+        CourierRequestHelper.createCourier("{}").then().assertThat()
+                .body("message",equalTo("Недостаточно данных для создания учетной записи"))
+                .statusCode(400);
+    }
+
+    @Test
+    @DisplayName("Проверка создания курьера с отсутствующим полем логин")
+    @Description("При создании курьера поле с логином не передается в запрос, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createCourierWithoutLoginTest() {
         JsonObject json = new Gson().toJsonTree(courier).getAsJsonObject();
         json.remove("login");
@@ -81,6 +110,9 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания курьера с отсутствующим полем пароль")
+    @Description("При создании курьера поле с паролем не передается в запрос, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createCourierWithoutPasswordTest() {
         JsonObject json = new Gson().toJsonTree(courier).getAsJsonObject();
         json.remove("password");
@@ -90,6 +122,9 @@ public class CourierCreationTest {
     }
 
     @Test
+    @DisplayName("Проверка создания курьера с отсутствующим полем имя")
+    @Description("При создании курьера поле с именем не передается в запрос, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createCourierWithoutFirstNameTest() {
         JsonObject json = new Gson().toJsonTree(courier).getAsJsonObject();
         json.remove("firstName");
@@ -99,13 +134,9 @@ public class CourierCreationTest {
     }
 
     @Test
-    public void createCourierWithBlankBodyTest() {
-        CourierRequestHelper.createCourier("{}").then().assertThat()
-                .body("message",equalTo("Недостаточно данных для создания учетной записи"))
-                .statusCode(400);
-    }
-
-    @Test
+    @DisplayName("Проверка создания курьера с пустым запросом")
+    @Description("При создании курьера передается пустой запрос, " +
+            "проверяется ожидаемое тело ответа и код статуса")
     public void createCourierWithoutBodyTest() {
         CourierRequestHelper.createCourier("").then().assertThat()
                 .body("message",equalTo("Недостаточно данных для создания учетной записи"))
