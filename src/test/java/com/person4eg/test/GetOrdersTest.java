@@ -1,6 +1,7 @@
 package com.person4eg.test;
 
 import com.person4eg.helper.OrderRequestHelper;
+import com.person4eg.utils.Constants;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -13,7 +14,7 @@ public class GetOrdersTest {
 
     @Before
     public void setup() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        RestAssured.baseURI = Constants.baseURI;
     }
 
     @Test

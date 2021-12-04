@@ -3,6 +3,7 @@ package com.person4eg.test;
 import com.person4eg.generator.OrderGenerator;
 import com.person4eg.helper.OrderRequestHelper;
 import com.person4eg.pojo.Order;
+import com.person4eg.utils.Constants;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -18,16 +19,16 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(Parameterized.class)
 public class OrderCreationTest {
 
-    private final Order order;
+    private final List<String> colors;
     private String responseBody;
 
-    public  OrderCreationTest(Order order) {
-        this.order = order;
+    public  OrderCreationTest(List<String> colors) {
+        this.colors = colors;
     }
 
     @Before
     public void setup() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        RestAssured.baseURI = Constants.baseURI;
     }
 
     @After
@@ -41,10 +42,10 @@ public class OrderCreationTest {
     @Parameterized.Parameters
     public static Object[][] getColor() {
         return new Object[][]{
-                {OrderGenerator.generate(List.of())},
-                {OrderGenerator.generate(List.of("BLACK"))},
-                {OrderGenerator.generate(List.of("GREY"))},
-                {OrderGenerator.generate(List.of("GREY", "BLACK"))}
+                {List.of()},
+                {List.of("BLACK")},
+                {List.of("GREY")},
+                {List.of("GREY", "BLACK")}
         };
     }
 
@@ -53,6 +54,7 @@ public class OrderCreationTest {
     @Description("Проверяет создание заказа с разными вариантами выбора цвета: " +
             "с серым, с черным, серым и черным одновременно или без выбора цвета")
     public void orderCreationTest() {
+        Order order = OrderGenerator.generate(colors);
         Response response = OrderRequestHelper.createOrder(order.toString());
         response.then().assertThat().body("track", notNullValue()).statusCode(201);
         this.responseBody = response.body().asString();

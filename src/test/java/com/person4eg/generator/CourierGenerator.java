@@ -9,7 +9,7 @@ public class CourierGenerator {
     public static Courier generate() {
         String login = UUID.randomUUID().toString();
         String password = UUID.randomUUID().toString();
-        String firstName = SimpleDataGenerator.generateFirstName();
+        String firstName = Generator.INSTANCE.getFaker().name().firstName();
         return new Courier(login, password, firstName);
     }
 }

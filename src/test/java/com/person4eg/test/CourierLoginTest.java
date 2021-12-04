@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.person4eg.generator.CourierGenerator;
 import com.person4eg.helper.CourierRequestHelper;
 import com.person4eg.pojo.Courier;
+import com.person4eg.utils.Constants;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
@@ -24,7 +25,7 @@ public class CourierLoginTest {
     @Before
     public void setup() {
         courier = CourierGenerator.generate();
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        RestAssured.baseURI = Constants.baseURI;
     }
 
     @After
